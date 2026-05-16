@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import CONFIG from "./dotenv.config";
+import CONFIG from "./dotenv.config.js";
 
 export const dnConnect = async () => {
   try {
