@@ -17,6 +17,7 @@ const CONFIG = {
   PORT: process.env.PORT,
   MONGO_URI: process.env.MONGO_URI,
   JWT_SECRET: process.env.JWT_SECRET,
+  IMAGEKIT_PRVT_KEY:process.env.IMAGEKIT_PRVT_KEY
 };
 
 export default CONFIG;
