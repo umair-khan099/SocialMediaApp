@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import CONFIG from "./dotenv.config.js";
 
-export const dnConnect = async () => {
+export const dbConnect = async () => {
   try {
     if (!CONFIG.MONGO_URI) {
       console.log("MONGO_URI is not found");
