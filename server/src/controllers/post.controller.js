@@ -73,7 +73,7 @@ export const getPosts = async (req, res) => {
   }
 };
 
-export const getUserPosts = async (req, res) => {
+export const getPostDetails = async (req, res) => {
   try {
     const token = req.cookies.token;
     const postId = req.params.postId;
@@ -86,9 +86,15 @@ export const getUserPosts = async (req, res) => {
 
     const user = jwt.verify(token, CONFIG.JWT_SECRET);
 
-    const posts = await Post.findById(postId);
+    const post = await Post.findById(postId);
 
-    const isValidUser = posts.user.toString() === user.id;
+    if (!post) {
+      return res.status(404).json({
+        message: "post Not found ",
+      });
+    }
+
+    const isValidUser = post.user.toString() === user.id;
 
     if (!isValidUser) {
       return res.status(403).json({
@@ -97,7 +103,7 @@ export const getUserPosts = async (req, res) => {
     }
     return res.status(201).json({
       message: "fetch user post",
-      posts,
+      post,
     });
   } catch (error) {
     console.log(error);
