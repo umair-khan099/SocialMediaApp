@@ -9,18 +9,12 @@ const imagekit = new Imagekit({
 export const createPost = async (req, res) => {
   try {
     const caption = req.body.caption;
-    const token = req.cookies.token;
-    if (!token) {
-      return res.this.status(400).json({
-        message: " token not found Unauthorized Credentials",
-      });
-    }
+    const userId = req.user;
     if (!req.file) {
       return res.status(400).json({
         message: "Image file is required",
       });
     }
-    const user = jwt.verify(token, CONFIG.JWT_SECRET);
 
     const file = await imagekit.files.upload({
       file: await toFile(Buffer.from(req.file.buffer), "file "),
@@ -31,7 +25,7 @@ export const createPost = async (req, res) => {
     const post = await Post.create({
       caption,
       imageUrl: file.url,
-      user: user.id,
+      user: userId,
     });
 
     return res.status(201).json({
@@ -48,15 +42,7 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({
-        message: " token not found Unauthorized Credentials",
-      });
-    }
-
-    const user = jwt.verify(token, CONFIG.JWT_SECRET);
-    const userId = user.id;
+    const userId = req.user;
     const posts = await Post.find({ user: userId });
 
     if (!posts) {
@@ -75,16 +61,8 @@ export const getPosts = async (req, res) => {
 
 export const getPostDetails = async (req, res) => {
   try {
-    const token = req.cookies.token;
     const postId = req.params.postId;
-
-    if (!token) {
-      return res.status(401).json({
-        message: " token not found Unauthorized Credentials",
-      });
-    }
-
-    const user = jwt.verify(token, CONFIG.JWT_SECRET);
+    const userId = req.user;
 
     const post = await Post.findById(postId);
 
@@ -94,7 +72,7 @@ export const getPostDetails = async (req, res) => {
       });
     }
 
-    const isValidUser = post.user.toString() === user.id;
+    const isValidUser = post.user.toString() === userId;
 
     if (!isValidUser) {
       return res.status(403).json({
