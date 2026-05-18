@@ -1,24 +1,17 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router";
-
+import { useAuth } from "../hooks/useAuth";
 const Login = () => {
   const [userInfo, setUserInfo] = useState("");
   const [password, setPassword] = useState("");
+  const { handleLogin } = useAuth();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await axios.post(
-      "http://localhost:3000/api/auth/login",
-      {
-        userName: userInfo,
-        email: userInfo,
-        password: password,
-      },
-      { withCredentials: true },
-    );
-    console.log(res);
+    const response = await handleLogin(userInfo, password);
+    console.log(response);
   };
 
   return (
@@ -29,7 +22,7 @@ const Login = () => {
           <p className="text-white/80">Login to your account</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label className="block text-white font-medium text-sm">
               Username or Email

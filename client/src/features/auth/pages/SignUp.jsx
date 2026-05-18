@@ -1,25 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 const SignUp = () => {
-  const [username, setUsername] = useState("");
+  const { handleSignUp } = useAuth();
+  const [userName, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUp = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post(
-      "http://localhost:3000/api/auth/register",
-      {
-        userName: username,
-        email,
-        password,
-      },
-      { withCredentials: true },
-    );
+
+    const responce = await handleSignUp(userName, email, password);
+    console.log(responce);
   };
-  console.log(username, email, password);
+  console.log(userName, email, password);
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
       <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20">
@@ -28,13 +24,13 @@ const SignUp = () => {
           <p className="text-white/80">Join our social media community</p>
         </div>
 
-        <form onSubmit={handleSignUp} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label className="block text-white font-medium text-sm">
               Username
             </label>
             <input
-              value={username}
+              value={userName}
               type="text"
               placeholder="Choose a username"
               onChange={(e) => setUsername(e.target.value)}
