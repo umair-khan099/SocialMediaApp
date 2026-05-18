@@ -72,3 +72,38 @@ export const unFollowUser = async (req, res) => {
     });
   }
 };
+
+export const manageFollowRequest = async (req, res) => {
+  try {
+    const followerId = req.params.userId;
+    const followeeId = req.user;
+    const status = req.params.status;
+
+    const follow = await Follows.findOne({
+      follower: followerId,
+      followee: followeeId,
+    });
+    if (!follow) {
+      return res.status(404).json({
+        message: "follow request not exist",
+      });
+    }
+
+    const update = await Follows.findByIdAndUpdate(
+      { _id: follow.id },
+      { status: status },
+      {
+        new: true, // Return updated document
+        runValidators: true, // Run schema validation
+      },
+    );
+    return res.status(201).json({
+      message: `follow has ${status}`,
+      update,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Somthing went Wrong at ManageFollowRequest controller",
+    });
+  }
+};
