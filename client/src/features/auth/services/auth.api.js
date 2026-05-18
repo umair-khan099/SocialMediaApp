@@ -6,21 +6,20 @@ const api = axios.create({
 });
 
 export const signUp = async (userName, email, password) => {
-  try {
-    const responce = await api.post("/signup", { userName, email, password });
-  } catch (error) {
-    throw err;
-  }
+  const responce = await api.post("/register", { userName, email, password });
+  return responce.data;
 };
 
 export const login = async (userInfo, password) => {
-  try {
-    const responce = api.post("/login", {
-      userName: userInfo,
-      email: userInfo,
-      password,
-    });
-  } catch (error) {
-    throw err;
-  }
+  const responce = await api.post("/login", {
+    userName: userInfo,
+    email: userInfo,
+    password,
+  });
+  return responce.data;
+};
+
+export const getMe = async () => {
+  const responce = api.get("/get-me");
+  return responce.data;
 };

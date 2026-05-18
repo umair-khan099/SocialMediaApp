@@ -86,6 +86,22 @@ export const login = async (req, res) => {
   }
 };
 
-export const getMe = async (req ,res) =>{
-  
-}
+export const getMe = async (req, res) => {
+  try {
+    const userId = req.user;
+
+    const user = await User.findById(userId);
+
+    res.status(201).json({
+      message: "user fetch successfully",
+      user: {
+        userName: user.userName,
+        email: user.email,
+        bio: user.bio,
+        profileImage: user.profileImage,
+      },
+    });
+  } catch (error) {
+    message: "Somthing went wrong at get-me controller";
+  }
+};
