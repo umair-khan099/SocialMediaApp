@@ -2,6 +2,8 @@ import CONFIG from "../config/dotenv.config.js";
 import { Post } from "../model/post.model.js";
 import Imagekit, { toFile } from "@imagekit/nodejs";
 import jwt from "jsonwebtoken";
+import { User } from "../model/user.model.js";
+import { Likes } from "../model/like.model.js";
 
 const imagekit = new Imagekit({
   privateKey: CONFIG.IMAGEKIT_PRVT_KEY,
@@ -43,11 +45,27 @@ export const createPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     const userId = req.user;
-    const posts = await Post.find({ user: userId });
+    const allPosts = await Post.find()
+      .populate("user", "userName profileImage ")
+      .lean();
+    const posts = await Promise.all(
+      allPosts.map(async (post) => {
+        const isLiked = await Likes.findOne({
+          post: post._id,
+          user: userId,
+        });
+
+        return {
+          ...post,
+          isLiked: !!isLiked,
+        };
+      }),
+    );
 
     if (!posts) {
       console.log("no posts");
     }
+
     return res.status(201).json({
       message: "featched all Posts",
       posts,
