@@ -28,3 +28,20 @@ export const addLike = async (req, res) => {
     });
   }
 };
+
+export const unlike = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.user;
+    const isPostExist = await Likes.findOne({ post: postId, user: userId });
+
+    if (!isPostExist) {
+      return res.status(404).json({
+        message: "post is not found",
+      });
+    }
+
+    const removeLike = await Likes.findByIdAndDelete({ _id: isPostExist._id });
+    res.send("deleted");
+  } catch (error) {}
+};
