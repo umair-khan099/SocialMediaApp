@@ -1,19 +1,25 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+
 const Login = () => {
+  const { handleLogin, loading } = useAuth();
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState("");
   const [password, setPassword] = useState("");
-  const { handleLogin } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await handleLogin(userInfo, password);
-    console.log(response);
+    const responce = await handleLogin(userInfo, password);
+    console.log(responce);
+    navigate("/feed");
   };
 
+  if (loading) {
+    return <h1>loading....</h1>;
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
       <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/20">

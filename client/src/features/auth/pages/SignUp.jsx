@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 
 const SignUp = () => {
-  const { handleSignUp } = useAuth();
+  const { handleSignUp, loading } = useAuth();
+  const navigate = useNavigate();
   const [userName, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,9 +13,14 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const responce = await handleSignUp(userName, email, password);
-    console.log(responce);
-  };
+    const response = await handleSignUp(userName, email, password);
+    console.log(response);
+    navigate("/feed");
+  };  
+
+  if (loading) {
+    return <h1>loading...</h1>;
+  }
   console.log(userName, email, password);
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
