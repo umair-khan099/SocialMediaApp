@@ -25,5 +25,5 @@ import { likeRouter } from "./routes/like.routes.js";
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/send", followRouter);
-app.use("/api/send", likeRouter);
+app.use("/api", likeRouter);
 export default app;

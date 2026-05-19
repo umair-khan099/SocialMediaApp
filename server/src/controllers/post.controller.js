@@ -45,23 +45,16 @@ export const createPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     const userId = req.user;
-    const allPosts = await Post.find()
-      .populate("user", "userName profileImage ")
-      .lean();
     const posts = await Promise.all(
-      allPosts.map(async (post) => {
+      (await Post.find().populate("user").lean()).map(async (post) => {
         const isLiked = await Likes.findOne({
           post: post._id,
           user: userId,
         });
-
-        return {
-          ...post,
-          isLiked: !!isLiked,
-        };
+        post.isLiked = isLiked;
+        return post;
       }),
     );
-
     if (!posts) {
       console.log("no posts");
     }
