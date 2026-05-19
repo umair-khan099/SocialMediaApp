@@ -13,4 +13,5 @@ const upload = multer({ storage: multer.memoryStorage() });
 postRouter.post("/createpost", isAuth, upload.single("image"), createPost);
 postRouter.get("/getposts", isAuth, getPosts);
 postRouter.get("/details/:postId", isAuth, getPostDetails);
+
 export default postRouter;
