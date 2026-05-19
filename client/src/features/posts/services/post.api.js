@@ -13,3 +13,13 @@ export const getPost = async () => {
     throw error;
   }
 };
+
+export const createPost = async (selectedImage, caption) => {
+  const formData = new FormData();
+
+  formData.append("image", selectedImage);
+  formData.append("caption", caption);
+
+  const response = await api.post("/createpost", formData);
+  return response.data;
+};
