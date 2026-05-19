@@ -3,6 +3,7 @@ import Login from "./features/auth/pages/Login";
 import SignUp from "./features/auth/pages/SignUp";
 import Feed from "./features/posts/pages/Feed";
 import Home from "./features/home/pages/Home";
+import CreatePost from "./features/posts/pages/CreatePost";
 
 export const routes = createBrowserRouter([
   {
@@ -14,12 +15,16 @@ export const routes = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: "/feed",
+    path: "/home",
     element: <Home />,
     children: [
       {
         index: true,
         element: <Feed />,
+      },
+      {
+        path: "createpost",
+        element: <CreatePost />,
       },
     ],
   },
