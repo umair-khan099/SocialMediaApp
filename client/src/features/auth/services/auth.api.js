@@ -6,20 +6,32 @@ const api = axios.create({
 });
 
 export const signUp = async (userName, email, password) => {
-  const responce = await api.post("/register", { userName, email, password });
-  return responce.data;
+  try {
+    const response = await api.post("/register", { userName, email, password });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const login = async (userInfo, password) => {
-  const responce = await api.post("/login", {
-    userName: userInfo,
-    email: userInfo,
-    password,
-  });
-  return responce.data;
+  try {
+    const response = await api.post("/login", {
+      userName: userInfo,
+      email: userInfo,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getMe = async () => {
-  const responce = api.get("/get-me");
-  return responce.data;
+  try {
+    const response = await api.get("/get=me");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
