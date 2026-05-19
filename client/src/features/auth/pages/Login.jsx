@@ -14,7 +14,7 @@ const Login = () => {
 
     const responce = await handleLogin(userInfo, password);
     console.log(responce);
-    navigate("/feed");
+    navigate("/home");
   };
 
   if (loading) {
